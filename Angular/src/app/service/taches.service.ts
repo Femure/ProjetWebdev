@@ -15,11 +15,9 @@ export class TachesService {
     return this.http.post<Tache>(this.url, tache, { withCredentials: true });
   }
   updateTaches(tache: Tache): Observable<Tache> {
-    return this.http.put<Tache>(this.url + tache._id, tache,
-      { withCredentials: true });
+    return this.http.put<Tache>(this.url + tache._id, tache, { withCredentials: true });
   }
   removeTaches(tache: Tache): Observable<Tache> {
-    return this.http.delete<Tache>(this.url + tache._id,
-      { withCredentials: true });
+    return this.http.delete<Tache>(this.url + tache._id, { withCredentials: true });
   }
 }

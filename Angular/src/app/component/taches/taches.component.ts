@@ -15,10 +15,11 @@ export class TachesComponent implements OnInit {
 
   newTache: Tache = {
     titre: '',
-    termine: false
+    termine: false,
+    statut: "Undefined"
   };
   
-  filter : string = "Tous";
+  filter: string = "Undefined";
 
   constructor(private tacheService: TachesService, private router: Router, private userService: UserService) { }
 
@@ -27,9 +28,10 @@ export class TachesComponent implements OnInit {
       next: (data: Array<Tache>) => { this.taches = data; }
     });
   }
-  ajouter() {
+  ajouter(value : string) {
+    this.newTache.statut = value;
     this.tacheService.ajoutTaches(this.newTache).subscribe({
-      next: (data) => { 
+      next: (data) => {    
         this.taches.push(data);
       }
     });
@@ -49,9 +51,6 @@ export class TachesComponent implements OnInit {
     this.userService.logout().subscribe(() => {
       this.router.navigate(['']);
     })
-  }
-  change(value : string){
-    this.filter = value;
   }
 
 }

@@ -9,12 +9,12 @@
                 <h2>Undefined</h2>
                 <div class="d-flex flex-row justify-content-center m-1">
                     <input id="inputAjoutTacheUndefined" class="saisieInputUndefined w-100" type="text"
-                        name="tacheUndefined" placeholder="tache" [(ngModel)]="newTache.titre">
-                    <button id="buttonAjoutTache" (click)="ajouter('Undefined')" class="btn btn-primary"
+                        name="tacheUndefined" placeholder="tache" [(ngModel)]="newTacheUndefined.titre">
+                    <button id="buttonAjoutTache" (click)="ajouterUndefined()" class="btn btn-primary"
                         value="Ajouter">Ajouter</button>
                 </div>
                 <div id="listeTaches" class="d-flex flex-column">
-                    <div *ngFor="let tache of (taches | filtreTache:'Undefined') "
+                    <div *ngFor="let tache of tachesUndefined "
                         class="d-flex justify-content-between m-1">
                         <input type="checkbox" (click)="modifier(tache)" [(ngModel)]="tache.termine">
                         <div [ngClass]="tache.termine? 'text-decoration-line-through' : '' ">{{tache.titre}}</div>
@@ -26,12 +26,12 @@
                 <h2>En attente</h2>
                 <div class="d-flex flex-row justify-content-center m-1">
                     <input id="inputAjoutTacheEnAttente" class="saisieInputEnAttente w-100" type="text"
-                        name="tacheEnAttente" placeholder="tache" [(ngModel)]="newTache.titre">
-                    <button id="buttonAjoutTache" (click)="ajouter('En attente')" class="btn btn-primary"
+                        name="tacheEnAttente" placeholder="tache" [(ngModel)]="newTacheEnAttente.titre">
+                    <button id="buttonAjoutTache" (click)="ajouterEnAttente()" class="btn btn-primary"
                         value="Ajouter">Ajouter</button>
                 </div>
                 <div id="listeTaches" class="d-flex flex-column">
-                    <div *ngFor="let tache of (taches | filtreTache:'En attente')"
+                    <div *ngFor="let tache of tachesEnAttente"
                         class="d-flex justify-content-between m-1">
                         <input type="checkbox" (click)="modifier(tache)" [(ngModel)]="tache.termine">
                         <div [ngClass]="tache.termine? 'text-decoration-line-through' : '' ">{{tache.titre}}</div>
@@ -43,12 +43,12 @@
                 <h2>En cours</h2>
                 <div class="d-flex flex-row justify-content-center m-1">
                     <input id="inputAjoutTacheEnCours" class="saisieInputEnCours w-100" type="text" name="tacheEnCours"
-                        placeholder="tache" [(ngModel)]="newTache.titre">
-                    <button id="buttonAjoutTache" (click)="ajouter('En cours')" class="btn btn-primary"
+                        placeholder="tache" [(ngModel)]="newTacheEnCours.titre">
+                    <button id="buttonAjoutTache" (click)="ajouterEnCours()" class="btn btn-primary"
                         value="Ajouter">Ajouter</button>
                 </div>
                 <div id="listeTaches" class="d-flex flex-column">
-                    <div *ngFor="let tache of (taches | filtreTache:'En cours')"
+                    <div *ngFor="let tache of tachesEnCours"
                         class="d-flex justify-content-between m-1">
                         <input type="checkbox" (click)="modifier(tache)" [(ngModel)]="tache.termine">
                         <div [ngClass]="tache.termine? 'text-decoration-line-through' : '' ">{{tache.titre}}</div>
@@ -60,12 +60,12 @@
                 <h2>Termine</h2>
                 <div class="d-flex flex-row justify-content-center m-1">
                     <input id="inputAjoutTacheTermine" class="saisieInputTermine w-100" type="text" name="tacheTermine"
-                        placeholder="tache" [(ngModel)]="newTache.titre">
-                    <button id="buttonAjoutTache" (click)="ajouter('Termine')" class="btn btn-primary"
+                        placeholder="tache" [(ngModel)]="newTacheTermine.titre">
+                    <button id="buttonAjoutTache" (click)="ajouterTermine()" class="btn btn-primary"
                         value="Ajouter">Ajouter</button>
                 </div>
                 <div id="listeTaches" class="d-flex flex-column">
-                    <div *ngFor="let tache of (taches | filtreTache:'Termine')"
+                    <div *ngFor="let tache of tachesTermine"
                         class="d-flex justify-content-between m-1">
                         <input type="checkbox" (click)="modifier(tache)" [(ngModel)]="tache.termine">
                         <div [ngClass]="tache.termine? 'text-decoration-line-through' : '' ">{{tache.titre}}</div>

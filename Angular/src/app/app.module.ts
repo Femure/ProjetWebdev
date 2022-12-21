@@ -19,9 +19,9 @@ import { FiltreTachePipe } from './pipe/filtre-tache.pipe';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule,
-    FormsModule
- ],
+    FormsModule,
+    HttpClientModule
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })

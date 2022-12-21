@@ -6,23 +6,21 @@ import { Tache } from '../model/tache';
 })
 export class FiltreTachePipe implements PipeTransform {
 
-  transform(value: Array<Tache>, filter:string): Array<Tache> {
+  transform(value: Array<Tache>, filter: string): Array<Tache> {
     if (!value) {
       return value;
     }
-    switch(filter) {
-      case 'Actif':
-        return value.filter( tache =>  !tache.termine)
-        break;
-      case 'Termine':
-        return value.filter( tache =>  tache.termine)
-      case 'Tous':
-        return value;
-        break;
-      default:
-        return value;
-
+    else {
+      switch (filter) {
+        case "Tous":
+          return value;
+        case "Actif":
+          return value.filter(tache => !tache.termine);
+        case "Termine":
+          return value.filter(tache => tache.termine);;
+        default:
+          return value;
+      }
     }
   }
-
 }

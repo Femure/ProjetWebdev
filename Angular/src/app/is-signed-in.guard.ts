@@ -6,30 +6,20 @@ import { UserService } from './service/user.service';
 @Injectable({
   providedIn: 'root'
 })
+
 export class IsSignedInGuard implements CanActivate {
-  constructor(private userService: UserService, private router: Router) {}
-
+  constructor(private userService: UserService, private router: Router) { }
   async canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Promise<boolean | UrlTree>  {
-      try {
-        await lastValueFrom(this.userService.isConnected());
-        return true;
-        } catch (err) {
-        return this.router.createUrlTree(['']);
-        }
 
-        
-/*
-    return this.userService.isConnected().pipe(map(() => {
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot): Promise<boolean | UrlTree> {
+    try {
+      await lastValueFrom(this.userService.isConnected());
       return true;
-    }),
-    catchError(() => {
-        return of(this.router.createUrlTree(['']));
-      })
-    );*/
-  
-  
+    } catch (err) {
+      return this.router.createUrlTree(['']);
+    }
+    return true;
   }
-  
+
 }

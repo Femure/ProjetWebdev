@@ -9,59 +9,50 @@ import { UserService } from 'src/app/service/user.service';
   templateUrl: './taches.component.html',
   styleUrls: ['./taches.component.css']
 })
+
 export class TachesComponent implements OnInit {
   taches: Array<Tache> = [];
+
   newTache: Tache = {
-    titre : '',
-    termine : false
-  };  
+    titre: '',
+    termine: false
+  };
   
-  filter:string = 'Tous';
+  filter : string = "Tous";
 
-  constructor(private tacheService: TachesService,
-    private userService: UserService,
-    private router: Router){ }
-  
-  ngOnInit(): void {
+  constructor(private tacheService: TachesService, private router: Router, private userService: UserService) { }
+
+  ngOnInit() {
     this.tacheService.getTaches().subscribe({
-      next: (data:Array<Tache>) => { this.taches = data; }
+      next: (data: Array<Tache>) => { this.taches = data; }
     });
-
-  }  
-
+  }
   ajouter() {
     this.tacheService.ajoutTaches(this.newTache).subscribe({
-      next: (data) => {
+      next: (data) => { 
         this.taches.push(data);
       }
     });
-    
-  }  
-
-  supprimer(tache: Tache): void {
+  }
+  supprimer(tache: Tache) {
     this.tacheService.removeTaches(tache).subscribe({
       next: (data) => {
-        this.taches = this.taches.filter(t => tache._id != t._id);
+        this.taches = this.taches.filter(e => tache._id != e._id);
       }
     });
-
   }
-
   modifier(tache: Tache) {
     tache.termine = !tache.termine;
-    this.tacheService.updateTaches(tache).subscribe({
-      next: (data) => {
-      }
-    });
+    this.tacheService.updateTaches(tache);
   }
-
   loggout() {
     this.userService.logout().subscribe(() => {
       this.router.navigate(['']);
     })
   }
-
-  change(filter:string) {
-    this.filter = filter;
+  change(value : string){
+    this.filter = value;
   }
+
 }
+

@@ -106,7 +106,7 @@ export class TachesComponent implements OnInit {
   }
   modifier(tache: Tache) {
     tache.termine = !tache.termine;
-    this.tacheService.updateTaches(tache);
+    this.tacheService.updateTaches(tache).subscribe({});
   }
   loggout() {
     this.userService.logout().subscribe(() => {
@@ -114,11 +114,9 @@ export class TachesComponent implements OnInit {
     })
   }
 
-  drop(event: CdkDragDrop<Tache[]>) {
+  drop(event: CdkDragDrop<Array<Tache>>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-      console.log(typeof(event));
-      // this.tacheService.updateTaches(tache)
     } else {
       transferArrayItem(
         event.previousContainer.data,
@@ -127,5 +125,23 @@ export class TachesComponent implements OnInit {
         event.currentIndex,
       );
     }
+    switch (event.container.data) {
+      case this.tachesUndefined:
+        event.item.data.statut = "Undefined";
+        break;
+      case this.tachesEnAttente:
+        event.item.data.statut = "En attente";
+        break;
+      case this.tachesEnCours:
+        event.item.data.statut = "En cours";
+        break;
+      case this.tachesTermine:
+        event.item.data.statut = "Termine";
+        break;
+      default:
+        console.log("Problème drag and drop switch case");
+        break;
+    }
+    this.tacheService.updateTaches(event.item.data).subscribe({});
   }
 }

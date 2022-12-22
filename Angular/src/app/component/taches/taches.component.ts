@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Router } from '@angular/router';
 import { Tache } from 'src/app/model/tache';
 import { TachesService } from 'src/app/service/taches.service';
@@ -113,5 +114,18 @@ export class TachesComponent implements OnInit {
     })
   }
 
+  drop(event: CdkDragDrop<Tache[]>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+      console.log(typeof(event));
+      // this.tacheService.updateTaches(tache)
+    } else {
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex,
+      );
+    }
+  }
 }
-

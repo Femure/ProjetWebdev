@@ -10,19 +10,25 @@
             (click)="ajouterListeTaches()">Ajouter</button>
     </div>
     <div cdkDropListGroup class="d-flex flex-row justify-content-between align-items-start">
-        <div *ngFor="let listeListeTache of baseListeTaches" class="container">
-            <h2>{{listeListeTache.titre}}</h2>
+        <div *ngFor="let listeTaches of baseListeTaches" class="container">
+            <div class="d-flex flex-row justify-content-between">
+                <h2>{{listeTaches.titre}}</h2>
+                <button class="btn btn-outline-danger" (click)='supprimerListeTache(listeTaches)'>Supprimer</button>
+            </div>
+
             <div class="d-flex flex-row justify-content-center m-1">
                 <input id="inputAjoutTache" class="saisieInput w-100" type="text" name="tache" placeholder="tache"
                     [(ngModel)]="titreTache">
-                <button id="buttonAjoutTache" (click)="ajouterTache(listeListeTache.titre)" class="btn btn-primary"
+                <button id="buttonAjoutTache" (click)="ajouterTache(listeTaches.titre)" class="btn btn-primary"
                     value="Ajouter">Ajouter</button>
             </div>
-            <div class="ListeTaches" cdkDropList [cdkDropListData]="listeListeTache.taches" (cdkDropListDropped)="drop($event)">
-                <div cdkDrag [cdkDragData]="tache" *ngFor="let tache of listeListeTache.taches " class="tachesBox">
+            <div class="ListeTaches" cdkDropList [cdkDropListData]="listeTaches.taches"
+                (cdkDropListDropped)="drop($event)">
+                <div cdkDrag [cdkDragData]="tache" *ngFor="let tache of listeTaches.taches " class="tachesBox">
                     <input type="checkbox" (click)="modifier(tache)" [(ngModel)]="tache.termine">
                     <div [ngClass]="tache.termine? 'text-decoration-line-through' : '' ">{{tache.titre}}</div>
-                    <button class="btn btn-outline-danger" (click)='supprimerTache(tache)'>Supprimer</button>
+                    <button class="btn btn-outline-danger"
+                        (click)='supprimerTache(listeTaches, tache)'>Supprimer</button>
                 </div>
             </div>
         </div>

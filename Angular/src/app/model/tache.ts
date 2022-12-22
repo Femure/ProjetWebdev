@@ -5,7 +5,7 @@ export interface Tache {
     statut : string;
 }
 
-export interface ListeListeTaches {
+export interface ListeTaches {
     titre: string;
     taches : Array<Tache>;
 }

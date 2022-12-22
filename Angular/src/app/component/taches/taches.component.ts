@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Router } from '@angular/router';
-import { Tache, ListeListeTaches } from 'src/app/model/tache';
+import { Tache, ListeTaches } from 'src/app/model/tache';
 import { TachesService } from 'src/app/service/taches.service';
 import { UserService } from 'src/app/service/user.service';
 
@@ -16,12 +16,12 @@ export class TachesComponent implements OnInit {
   titreListe: string = "";
   titreTache: string = "";
 
-  listeListeTaches: ListeListeTaches = {
+  listeTaches: ListeTaches = {
     titre: "",
     taches: []
   }
 
-  baseListeTaches: Array<ListeListeTaches> = []
+  baseListeTaches: Array<ListeTaches> = []
 
 
   constructor(private tacheService: TachesService, private router: Router, private userService: UserService) { }
@@ -29,29 +29,32 @@ export class TachesComponent implements OnInit {
   ngOnInit() {
     this.tacheService.getTaches().subscribe({
       next: (listeTaches) => {
-        
+
       }
     });
   }
 
   ajouterListeTaches() {
 
-    let newListeListeTaches: ListeListeTaches = { //on creer une nouvelle liste de taches à chaque fois
+    let newListeListeTaches: ListeTaches = { //on creer une nouvelle liste de taches à chaque fois
       titre: "",
       taches: []
     }
-
-    this.tacheService.getTaches().subscribe({
-      next: (listeTaches) => {
-        let listeTachesFiltred = listeTaches.filter(tache =>
-          tache.statut == this.titreListe)
-        newListeListeTaches.taches = listeTachesFiltred;
-        newListeListeTaches.titre = this.titreListe;
-        if (listeTachesFiltred.length == 0) { //le statut n'exite pas dans la liste
-          this.baseListeTaches.push(newListeListeTaches);
+    let listeExisteDeja = this.baseListeTaches.filter(liste => liste.titre == this.titreListe);
+    if (listeExisteDeja.length == 0) { //on regarde si la liste qu'on veut créer n'existe pas déjà 
+      this.tacheService.getTaches().subscribe({
+        next: (listeTaches) => {
+          let listeTachesFiltred = listeTaches.filter(tache =>
+            tache.statut == this.titreListe)
+          newListeListeTaches.taches = listeTachesFiltred;
+          newListeListeTaches.titre = this.titreListe;
+          if (listeTachesFiltred.length == 0) { //le statut n'exite pas dans la liste
+            this.baseListeTaches.push(newListeListeTaches);
+          }
         }
-      }
-    });
+      });
+    }
+
   }
 
   ajouterTache(titreListe: string) {
@@ -71,13 +74,21 @@ export class TachesComponent implements OnInit {
     });
   }
 
-  supprimerTache(tache: Tache) {
+  supprimerListeTache(listeTaches: ListeTaches) {
+    listeTaches.taches.forEach(tache => {
+      this.tacheService.removeTaches(tache).subscribe({});
+    });
+    this.baseListeTaches = this.baseListeTaches.filter(liste => liste.titre != listeTaches.titre);
+  }
+
+  supprimerTache(listeTaches: ListeTaches, tache: Tache) {
     this.tacheService.removeTaches(tache).subscribe({
       next: () => {
-        this.listeListeTaches.taches = this.listeListeTaches.taches.filter(e => tache._id != e._id);
+        listeTaches.taches = listeTaches.taches.filter(e => tache._id != e._id);
       }
     });
   }
+
   modifier(tache: Tache) {
     tache.termine = !tache.termine;
     this.tacheService.updateTaches(tache).subscribe({});

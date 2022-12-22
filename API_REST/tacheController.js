@@ -13,21 +13,6 @@ exports.tacheGet = async function (req, res) {
         res.status(500).json({ message: err })
     }
 };
-exports.getListeTaches = async function (req, res, next) {
-    try {
-        db = await MongoClient.connect(url);
-        let dbo = db.db("taches");
-        let statut = req.body;
-        let listeTaches = await dbo.collection("taches").find(
-            {}).toArray();
-        let listeTachesFiltred = listeTaches.filter(taches =>
-            taches.statut == statut)
-        res.status(200).json(listeTachesFiltred);
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({ message: err })
-    }
-};
 
 exports.tachePost = async function (req, res, next) {
     let tache = req.body;

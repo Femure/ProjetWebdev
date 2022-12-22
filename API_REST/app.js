@@ -38,7 +38,6 @@ app.get('/isConnected',checkSignIn,  isConnected);
 
 
 app.get('/taches', checkSignIn, tacheGet);
-app.post('/taches', checkSignIn, getListeTaches);
 app.post('/taches', checkSignIn, tachePost);
 app.delete('/taches/:id', checkSignIn, tacheDelete);
 app.put('/taches/:id', checkSignIn, tachePut);

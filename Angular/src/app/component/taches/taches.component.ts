@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Router } from '@angular/router';
-import { Tache, ListeTache } from 'src/app/model/tache';
+import { Tache, ListeListeTaches } from 'src/app/model/tache';
 import { TachesService } from 'src/app/service/taches.service';
 import { UserService } from 'src/app/service/user.service';
 
@@ -12,121 +12,69 @@ import { UserService } from 'src/app/service/user.service';
 })
 
 export class TachesComponent implements OnInit {
-  tachesUndefined: Array<Tache> = [];
-  tachesEnAttente: Array<Tache> = [];
-  tachesEnCours: Array<Tache> = [];
-  tachesTermine: Array<Tache> = [];
-  listeTaches: Array<Tache> = [];
 
-  listeStatut: Array<string> = [];
-  statut: string = "";
+  titreListe: string = "";
+  titreTache: string = "";
 
-  // newTache: Tache = {
-  //   titre: '',
-  //   termine: false,
-  //   statut: ""
-  // };
+  listeListeTaches: ListeListeTaches = {
+    titre: "",
+    taches: []
+  }
 
-  // listeTache: ListeTache = {
-  //   titre: '',
-  //   taches: []
-  // }
-
-  newTacheUndefined: Tache = {
-    titre: '',
-    termine: false,
-    statut: "Undefined"
-  };
-  newTacheEnAttente: Tache = {
-    titre: '',
-    termine: false,
-    statut: "En attente"
-  };
-  newTacheEnCours: Tache = {
-    titre: '',
-    termine: false,
-    statut: "En cours"
-  };
-  newTacheTermine: Tache = {
-    titre: '',
-    termine: false,
-    statut: "Termine"
-  };
+  baseListeTaches: Array<ListeListeTaches> = []
 
 
   constructor(private tacheService: TachesService, private router: Router, private userService: UserService) { }
 
   ngOnInit() {
     this.tacheService.getTaches().subscribe({
-      next: (data: Array<Tache>) => {
-        data.forEach(tache => {
-          switch (tache.statut) {
-            case "Undefined":
-              this.tachesUndefined.push(tache);
-              break;
-            case "En attente":
-              this.tachesEnAttente.push(tache);
-              break;
-            case "En cours":
-              this.tachesEnCours.push(tache);
-              break;
-            case "Termine":
-              this.tachesTermine.push(tache);
-              break;
-            default:
-              console.log("Problème switch case taches.components");
-              break;
-          }
-        });
-      }
-    });
-  }
-  ajouterUndefined() {
-    this.tacheService.ajoutTaches(this.newTacheUndefined).subscribe({
-      next: (data) => {
-        this.tachesUndefined.push(data);
-      }
-    });
-  }
-  ajouterEnAttente() {
-    this.tacheService.ajoutTaches(this.newTacheEnAttente).subscribe({
-      next: (data) => {
-        this.tachesEnAttente.push(data);
-      }
-    });
-  }
-  ajouterEnCours() {
-    this.tacheService.ajoutTaches(this.newTacheEnCours).subscribe({
-      next: (data) => {
-        this.tachesEnCours.push(data);
-      }
-    });
-  }
-  ajouterTermine() {
-    this.tacheService.ajoutTaches(this.newTacheTermine).subscribe({
-      next: (data) => {
-        this.tachesTermine.push(data);
+      next: (listeTaches) => {
+        
       }
     });
   }
 
   ajouterListeTaches() {
-    // this.listeStatut.filter(data => data == this.statut);
-    this.tacheService.getListeTaches(this.statut).subscribe({
-      next: (data) =>{
-        if(data)
+
+    let newListeListeTaches: ListeListeTaches = { //on creer une nouvelle liste de taches à chaque fois
+      titre: "",
+      taches: []
+    }
+
+    this.tacheService.getTaches().subscribe({
+      next: (listeTaches) => {
+        let listeTachesFiltred = listeTaches.filter(tache =>
+          tache.statut == this.titreListe)
+        newListeListeTaches.taches = listeTachesFiltred;
+        newListeListeTaches.titre = this.titreListe;
+        if (listeTachesFiltred.length == 0) { //le statut n'exite pas dans la liste
+          this.baseListeTaches.push(newListeListeTaches);
+        }
       }
-    }); //filtré la liste par rapport au statut et si la liste est vide alors créer la liste
-    
+    });
   }
 
-  supprimer(tache: Tache) {
+  ajouterTache(titreListe: string) {
+    let newTache: Tache = { //on créer une nouvelle tache dès qu'on l'ajoute
+      titre: this.titreTache,
+      termine: false,
+      statut: ""
+    };
+    this.tacheService.ajoutTaches(newTache).subscribe({
+      next: (data) => {
+        this.baseListeTaches.forEach(liste => {
+          if (liste.titre == titreListe) {
+            liste.taches.push(data);
+          }
+        })
+      }
+    });
+  }
+
+  supprimerTache(tache: Tache) {
     this.tacheService.removeTaches(tache).subscribe({
       next: () => {
-        this.tachesUndefined = this.tachesUndefined.filter(e => tache._id != e._id);
-        this.tachesEnAttente = this.tachesEnAttente.filter(e => tache._id != e._id);
-        this.tachesEnCours = this.tachesEnCours.filter(e => tache._id != e._id);
-        this.tachesTermine = this.tachesTermine.filter(e => tache._id != e._id);
+        this.listeListeTaches.taches = this.listeListeTaches.taches.filter(e => tache._id != e._id);
       }
     });
   }
@@ -151,23 +99,7 @@ export class TachesComponent implements OnInit {
         event.currentIndex,
       );
     }
-    switch (event.container.data) {
-      case this.tachesUndefined:
-        event.item.data.statut = "Undefined";
-        break;
-      case this.tachesEnAttente:
-        event.item.data.statut = "En attente";
-        break;
-      case this.tachesEnCours:
-        event.item.data.statut = "En cours";
-        break;
-      case this.tachesTermine:
-        event.item.data.statut = "Termine";
-        break;
-      default:
-        console.log("Problème drag and drop switch case");
-        break;
-    }
+    event.item.data.statut = event.container.data[0].statut;
     this.tacheService.updateTaches(event.item.data).subscribe({});
   }
 }

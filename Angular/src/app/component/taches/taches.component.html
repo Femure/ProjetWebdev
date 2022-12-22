@@ -5,29 +5,29 @@
     </div>
     <div class="bd-highlight d-flex justify-content-center m-5">
         <input id="inputAjoutListeTaches" class="saisieInputListeTaches w-25" type="text" name="tacheListeTaches"
-            placeholder="liste taches" [(ngModel)]="statut">
-        <button id="buttonAjoutListeTaches" class="btn btn-primary" value="Ajouter" (click)="ajouterListeTaches()">Ajouter</button>
+            placeholder="liste taches" [(ngModel)]="titreListe">
+        <button id="buttonAjoutListeTaches" class="btn btn-primary" value="Ajouter"
+            (click)="ajouterListeTaches()">Ajouter</button>
     </div>
     <div cdkDropListGroup class="d-flex flex-row justify-content-between align-items-start">
-         <div *ngFor="let taches of listeTaches" class="container">
-            <h2>{{taches.statut}}</h2>
+        <div *ngFor="let listeListeTache of baseListeTaches" class="container">
+            <h2>{{listeListeTache.titre}}</h2>
             <div class="d-flex flex-row justify-content-center m-1">
-                <input id="inputAjoutTache" class="saisieInput w-100" type="text"
-                    name="tache" placeholder="tache" [(ngModel)]="tache.titre">
-                <button id="buttonAjoutTacheUndefined" (click)="ajoute()" class="btn btn-primary"
+                <input id="inputAjoutTache" class="saisieInput w-100" type="text" name="tache" placeholder="tache"
+                    [(ngModel)]="titreTache">
+                <button id="buttonAjoutTache" (click)="ajouterTache(listeListeTache.titre)" class="btn btn-primary"
                     value="Ajouter">Ajouter</button>
             </div>
-            <div class="ListeTachess" cdkDropList [cdkDropListData]="tachesUndefined"
-                (cdkDropListDropped)="drop($event)">
-                <div cdkDrag [cdkDragData]="tache" *ngFor="let tache of tachesUndefined " class="tachesBox">
+            <div class="ListeTaches" cdkDropList [cdkDropListData]="listeListeTache.taches" (cdkDropListDropped)="drop($event)">
+                <div cdkDrag [cdkDragData]="tache" *ngFor="let tache of listeListeTache.taches " class="tachesBox">
                     <input type="checkbox" (click)="modifier(tache)" [(ngModel)]="tache.termine">
                     <div [ngClass]="tache.termine? 'text-decoration-line-through' : '' ">{{tache.titre}}</div>
-                    <button class="btn btn-outline-danger" (click)='supprimer(tache)'>Supprimer</button>
+                    <button class="btn btn-outline-danger" (click)='supprimerTache(tache)'>Supprimer</button>
                 </div>
             </div>
         </div>
 
-
+        <!-- 
 
         <div class="container">
             <h2>Undefined</h2>
@@ -94,5 +94,6 @@
                     <button class="btn btn-outline-danger" (click)='supprimer(tache)'>Supprimer</button>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
+</div>

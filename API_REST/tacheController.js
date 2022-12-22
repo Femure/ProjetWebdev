@@ -2,7 +2,7 @@ const mongodb = require('mongodb');
 const MongoClient = mongodb.MongoClient;
 const url = "mongodb://127.0.0.1:27017/";
 
-exports.tacheGet = async function(req, res) {
+exports.tacheGet = async function (req, res) {
     try {
         db = await MongoClient.connect(url);
         let dbo = db.db("taches");
@@ -13,8 +13,23 @@ exports.tacheGet = async function(req, res) {
         res.status(500).json({ message: err })
     }
 };
+exports.getListeTaches = async function (req, res, next) {
+    try {
+        db = await MongoClient.connect(url);
+        let dbo = db.db("taches");
+        let statut = req.body;
+        let listeTaches = await dbo.collection("taches").find(
+            {}).toArray();
+        let listeTachesFiltred = listeTaches.filter(taches =>
+            taches.statut == statut)
+        res.status(200).json(listeTachesFiltred);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ message: err })
+    }
+};
 
-exports.tachePost = async function(req, res, next) {
+exports.tachePost = async function (req, res, next) {
     let tache = req.body;
     try {
         db = await MongoClient.connect(url);
@@ -27,7 +42,7 @@ exports.tachePost = async function(req, res, next) {
     }
 };
 
-exports.tacheDelete = async function(req, res, next) {
+exports.tacheDelete = async function (req, res, next) {
     try {
         db = await MongoClient.connect(url);
         let dbo = db.db("taches");
@@ -39,11 +54,11 @@ exports.tacheDelete = async function(req, res, next) {
     }
 };
 
-exports.tachePut = async function(req, res, next) {
+exports.tachePut = async function (req, res, next) {
     try {
         db = await MongoClient.connect(url);
         let dbo = db.db("taches");
-        await dbo.collection("taches").updateOne({ _id: new mongodb.ObjectId(req.params.id) }, { $set: { titre: req.body.titre, termine: req.body.termine , statut: req.body.statut} });
+        await dbo.collection("taches").updateOne({ _id: new mongodb.ObjectId(req.params.id) }, { $set: { titre: req.body.titre, termine: req.body.termine, statut: req.body.statut } });
         res.status(200).send();
     } catch (err) {
         console.log(err);

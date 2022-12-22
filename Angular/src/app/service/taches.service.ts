@@ -11,6 +11,10 @@ export class TachesService {
   getTaches(): Observable<Array<Tache>> {
     return this.http.get<Array<Tache>>(this.url, { withCredentials: true });
   }
+  getListeTaches(statut: string): Observable<Array<Tache>> {
+    return this.http.post<Array<Tache>>(this.url,statut, { withCredentials: true });
+  }
+
   ajoutTaches(tache: Tache): Observable<Tache> {
     return this.http.post<Tache>(this.url, tache, { withCredentials: true });
   }

@@ -4,3 +4,8 @@ export interface Tache {
     termine: boolean;
     statut : string;
 }
+
+export interface ListeTache {
+    titre: string;
+    taches : Array<Tache>;
+}

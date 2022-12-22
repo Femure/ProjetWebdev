@@ -4,7 +4,7 @@ const session = require('express-session');
 const MongoClient = require('mongodb').MongoClient;
 const mongodb = require('mongodb');
 const bodyParser = require('body-parser');
-const { tacheGet, tachePost, tacheDelete, tachePut } = require('./tacheController');
+const { tacheGet, getListeTaches, tachePost, tacheDelete, tachePut } = require('./tacheController');
 const { signIn, login, logout, isConnected } = require('./authController');
 
 
@@ -37,8 +37,8 @@ app.get('/isConnected',checkSignIn,  isConnected);
 
 
 
-
 app.get('/taches', checkSignIn, tacheGet);
+app.post('/taches', checkSignIn, getListeTaches);
 app.post('/taches', checkSignIn, tachePost);
 app.delete('/taches/:id', checkSignIn, tacheDelete);
 app.put('/taches/:id', checkSignIn, tachePut);

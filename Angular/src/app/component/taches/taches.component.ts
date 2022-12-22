@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Router } from '@angular/router';
-import { Tache } from 'src/app/model/tache';
+import { Tache, ListeTache } from 'src/app/model/tache';
 import { TachesService } from 'src/app/service/taches.service';
 import { UserService } from 'src/app/service/user.service';
 
@@ -16,6 +16,21 @@ export class TachesComponent implements OnInit {
   tachesEnAttente: Array<Tache> = [];
   tachesEnCours: Array<Tache> = [];
   tachesTermine: Array<Tache> = [];
+  listeTaches: Array<Tache> = [];
+
+  listeStatut: Array<string> = [];
+  statut: string = "";
+
+  // newTache: Tache = {
+  //   titre: '',
+  //   termine: false,
+  //   statut: ""
+  // };
+
+  // listeTache: ListeTache = {
+  //   titre: '',
+  //   taches: []
+  // }
 
   newTacheUndefined: Tache = {
     titre: '',
@@ -94,9 +109,20 @@ export class TachesComponent implements OnInit {
       }
     });
   }
+
+  ajouterListeTaches() {
+    // this.listeStatut.filter(data => data == this.statut);
+    this.tacheService.getListeTaches(this.statut).subscribe({
+      next: (data) =>{
+        if(data)
+      }
+    }); //filtré la liste par rapport au statut et si la liste est vide alors créer la liste
+    
+  }
+
   supprimer(tache: Tache) {
     this.tacheService.removeTaches(tache).subscribe({
-      next: (data) => {
+      next: () => {
         this.tachesUndefined = this.tachesUndefined.filter(e => tache._id != e._id);
         this.tachesEnAttente = this.tachesEnAttente.filter(e => tache._id != e._id);
         this.tachesEnCours = this.tachesEnCours.filter(e => tache._id != e._id);

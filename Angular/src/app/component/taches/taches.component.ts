@@ -15,18 +15,58 @@ export class TachesComponent implements OnInit {
 
   titreListe: string = "";
 
-  baseListeTaches: Array<ListeTaches> = []
+  baseStatuts: Array<string> = [];
+
+  baseListeTaches: Array<ListeTaches> = [];
 
 
   constructor(private tacheService: TachesService, private router: Router, private userService: UserService) { }
 
   ngOnInit() {
-    this.tacheService.getTaches().subscribe({
+    this.tacheService.getTaches().subscribe({ // on récupère les différents statuts dans la bd "taches" 
       next: (listeTaches) => {
+        listeTaches.forEach((tache, index) => {
+          if (index == 0) {
+            this.baseStatuts.push(tache.statut);
+          }
+          else {
+            let cpt = 0;
+            this.baseStatuts.forEach(statut => { //on regarde pour chaque tache dans la base des statuts si le statut existe déjà ou non
+              if (tache.statut == statut) {
+                cpt++;
+              }
+            });
+            if (cpt == 0) {
+              this.baseStatuts.push(tache.statut);
+            }
+          }
+        });
 
+        
+        this.baseStatuts.forEach(statut => {//pour chaque statut on va récupérer les taches ayant ce statut
+          console.log("OK");
+          let newListeListeTaches: ListeTaches = { //on creer une nouvelle liste de taches à chaque fois
+            titreListe: statut,
+            titreTache: "",
+            taches: []
+          }
+
+          this.tacheService.getTaches().subscribe({
+            next: (listeTaches) => {
+              let listeTachesFiltred = listeTaches.filter(tache => tache.statut == statut);
+              newListeListeTaches.taches = listeTachesFiltred;
+              this.baseListeTaches.push(newListeListeTaches);
+            }
+          });
+        });
       }
     });
   }
+
+
+
+
+
 
   ajouterListeTaches() {
     let newListeListeTaches: ListeTaches = { //on creer une nouvelle liste de taches à chaque fois
@@ -39,8 +79,7 @@ export class TachesComponent implements OnInit {
     if (listeExisteDeja.length == 0) { //on regarde si la liste qu'on veut créer n'existe pas déjà 
       this.tacheService.getTaches().subscribe({
         next: (listeTaches) => {
-          let listeTachesFiltred = listeTaches.filter(tache =>
-            tache.statut == this.titreListe)
+          let listeTachesFiltred = listeTaches.filter(tache => tache.statut == this.titreListe);
           newListeListeTaches.taches = listeTachesFiltred;
           newListeListeTaches.titreListe = this.titreListe;
           if (listeTachesFiltred.length == 0) { //le statut n'exite pas dans la liste
@@ -52,11 +91,11 @@ export class TachesComponent implements OnInit {
 
   }
 
-  ajouterTache(listeTaches : ListeTaches) {
+  ajouterTache(listeTaches: ListeTaches) {
     let newTache: Tache = { //on créer une nouvelle tache dès qu'on l'ajoute
       titre: listeTaches.titreTache,
       termine: false,
-      statut: ""
+      statut: listeTaches.titreListe
     };
     this.tacheService.ajoutTaches(newTache).subscribe({
       next: (data) => {

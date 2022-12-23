@@ -9,8 +9,15 @@ exports.signIn = [
         try {
             db = await MongoClient.connect(url);
             let dbo = db.db("taches");
-            await dbo.collection("utilisateur").insertOne(utilisateur);
-            res.status(200).send();
+            let utilisateurs = await dbo.collection("utilisateur").find({}).toArray();
+            let utilisateurFiltred = utilisateurs.filter(user => user.login == utilisateur.login);
+            if (utilisateurFiltred.length > 0) { //vérification qu'il n'existe pas déjà un utilisateur avec l'identifiant avant de l'ajouter à la base
+                res.status(401).json({ message: 'Compte déjà existant' });
+            }
+            else {
+                await dbo.collection("utilisateur").insertOne(utilisateur);
+                res.status(200).send();
+            }
         } catch (err) {
             console.log(err);
             res.status(500).json({ message: err })

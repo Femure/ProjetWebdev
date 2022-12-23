@@ -10,13 +10,15 @@ import { TachesComponent } from './component/taches/taches.component';
 import { FiltreTachePipe } from './pipe/filtre-tache.pipe';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { SignInComponent } from './component/sign-in/sign-in.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     TachesComponent,
-    FiltreTachePipe
+    FiltreTachePipe,
+    SignInComponent
   ],
   imports: [
     BrowserModule,

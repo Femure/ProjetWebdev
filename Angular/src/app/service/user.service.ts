@@ -6,19 +6,26 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class UserService {
+
   url: string = 'http://localhost:3000/login';
+
   constructor(private http: HttpClient) { }
+
   login(user: User) {
     return this.http.post<void>(this.url, user, { withCredentials: true });
   }
+
   logout(): Observable<void> {
 
     return this.http.post<void>('http://localhost:3000/logout', {}, { withCredentials: true });
 
   }
+
   isConnected(): Observable<void> {
-    return this.http.get<void>('http://localhost:3000/isConnected', {
-      withCredentials: true
-    });
+    return this.http.get<void>('http://localhost:3000/isConnected', { withCredentials: true });
+  }
+
+  signIn(user: User): Observable<void> {
+    return this.http.post<void>('http://localhost:3000/signin', user, { withCredentials: true });
   }
 }

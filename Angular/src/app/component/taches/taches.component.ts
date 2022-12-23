@@ -133,18 +133,19 @@ export class TachesComponent implements OnInit {
     })
   }
 
-  drop(event: CdkDragDrop<Array<Tache>>) {
+  drop(event: CdkDragDrop<ListeTaches>) {
     if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+      moveItemInArray(event.container.data.taches, event.previousIndex, event.currentIndex);
     } else {
       transferArrayItem(
-        event.previousContainer.data,
-        event.container.data,
+        event.previousContainer.data.taches,
+        event.container.data.taches,
         event.previousIndex,
         event.currentIndex,
       );
     }
-    event.item.data.statut = event.container.data[0].statut;
+    event.item.data.statut = event.container.data.titreListe;
+    
     this.tacheService.updateTaches(event.item.data).subscribe({});
   }
 }

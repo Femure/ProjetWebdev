@@ -22,7 +22,7 @@
                 <button id="buttonAjoutTache" (click)="ajouterTache(listeTaches)" class="btn btn-primary"
                     value="Ajouter">Ajouter</button>
             </div>
-            <div class="listeTaches" cdkDropList [cdkDropListData]="listeTaches.taches"
+            <div class="listeTaches" cdkDropList [cdkDropListData]="listeTaches"
                 (cdkDropListDropped)="drop($event)">
                 <div cdkDrag [cdkDragData]="tache" *ngFor="let tache of listeTaches.taches " class="tachesBox">
                     <input type="checkbox" (click)="modifier(tache)" [(ngModel)]="tache.termine">

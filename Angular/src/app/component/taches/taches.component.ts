@@ -44,7 +44,6 @@ export class TachesComponent implements OnInit {
 
         
         this.baseStatuts.forEach(statut => {//pour chaque statut on va récupérer les taches ayant ce statut
-          console.log("OK");
           let newListeListeTaches: ListeTaches = { //on creer une nouvelle liste de taches à chaque fois
             titreListe: statut,
             titreTache: "",

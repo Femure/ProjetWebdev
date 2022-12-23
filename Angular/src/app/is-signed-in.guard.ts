@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { lastValueFrom, Observable } from 'rxjs';
+import { lastValueFrom } from 'rxjs';
 import { UserService } from './service/user.service';
 
 @Injectable({
@@ -8,6 +8,7 @@ import { UserService } from './service/user.service';
 })
 
 export class IsSignedInGuard implements CanActivate {
+
   constructor(private userService: UserService, private router: Router) { }
   async canActivate(
 
@@ -19,7 +20,6 @@ export class IsSignedInGuard implements CanActivate {
     } catch (err) {
       return this.router.createUrlTree(['']);
     }
-    return true;
   }
 
 }

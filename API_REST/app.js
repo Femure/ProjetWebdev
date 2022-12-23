@@ -1,14 +1,11 @@
 const express = require('express');
 const session = require('express-session');
 
-const MongoClient = require('mongodb').MongoClient;
-const mongodb = require('mongodb');
 const bodyParser = require('body-parser');
-const { tacheGet, getListeTaches, tachePost, tacheDelete, tachePut } = require('./tacheController');
-const { signIn, login, logout, isConnected } = require('./authController');
+const { tacheGet, tachePost, tacheDelete, tachePut } = require('./tacheController');
+const { signIn, login, logout, isConnected, getUsers } = require('./authController');
 
 
-const url = "mongodb://localhost:27017/";
 const app = express();
 const port = 3000;
 
@@ -19,7 +16,7 @@ app.use(session({
 }));
 
 const cors = require('cors')
-app.use(cors({credentials: true, origin: 'http://localhost:4200'}));
+app.use(cors({ credentials: true, origin: 'http://localhost:4200' }));
 
 function checkSignIn(req, res, next) {
   if (req.session.user) {
@@ -29,12 +26,14 @@ function checkSignIn(req, res, next) {
   }
 }
 
+
+
 app.post('/signin', signIn);
 app.post('/login', login);
 app.post('/logout', logout);
-app.get('/isConnected',checkSignIn,  isConnected);
+app.get('/isConnected', checkSignIn, isConnected);
 
-
+// app.get('/users', getUsers);
 
 
 app.get('/taches', checkSignIn, tacheGet);

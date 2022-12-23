@@ -3,6 +3,18 @@ const MongoClient = mongodb.MongoClient;
 const url = "mongodb://localhost:27017/";
 
 
+// exports.getUsers = async function (req, res) { // permet de voir les utilisateurs présents dans la bd
+//     try {
+//         db = await MongoClient.connect(url);
+//         let dbo = db.db("taches");
+//         let datas = await dbo.collection("utilisateur").find({}).toArray();
+//         res.status(200).json(datas);
+//     } catch (err) {
+//         console.log(err);
+//         res.status(500).json({ message: err })
+//     }
+// };
+
 exports.signIn = [
     async function (req, res) {
         let utilisateur = req.body;
@@ -59,7 +71,7 @@ exports.login = [
                 user.password == utilisateur.password)
 
             if (utilisateurFiltred.length > 0) {
-                req.session.user = utilisateurs[0].login;
+                req.session.user = utilisateurFiltred[0].login;
                 res.status(200).send();
             } else {
                 res.status(401).json({ message: 'Unauthorized' });

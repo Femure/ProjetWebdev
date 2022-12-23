@@ -14,12 +14,6 @@ import { UserService } from 'src/app/service/user.service';
 export class TachesComponent implements OnInit {
 
   titreListe: string = "";
-  titreTache: string = "";
-
-  listeTaches: ListeTaches = {
-    titre: "",
-    taches: []
-  }
 
   baseListeTaches: Array<ListeTaches> = []
 
@@ -35,19 +29,20 @@ export class TachesComponent implements OnInit {
   }
 
   ajouterListeTaches() {
-
     let newListeListeTaches: ListeTaches = { //on creer une nouvelle liste de taches à chaque fois
-      titre: "",
+      titreListe: "",
+      titreTache: "",
       taches: []
     }
-    let listeExisteDeja = this.baseListeTaches.filter(liste => liste.titre == this.titreListe);
+
+    let listeExisteDeja = this.baseListeTaches.filter(liste => liste.titreListe == this.titreListe);
     if (listeExisteDeja.length == 0) { //on regarde si la liste qu'on veut créer n'existe pas déjà 
       this.tacheService.getTaches().subscribe({
         next: (listeTaches) => {
           let listeTachesFiltred = listeTaches.filter(tache =>
             tache.statut == this.titreListe)
           newListeListeTaches.taches = listeTachesFiltred;
-          newListeListeTaches.titre = this.titreListe;
+          newListeListeTaches.titreListe = this.titreListe;
           if (listeTachesFiltred.length == 0) { //le statut n'exite pas dans la liste
             this.baseListeTaches.push(newListeListeTaches);
           }
@@ -57,16 +52,16 @@ export class TachesComponent implements OnInit {
 
   }
 
-  ajouterTache(titreListe: string) {
+  ajouterTache(listeTaches : ListeTaches) {
     let newTache: Tache = { //on créer une nouvelle tache dès qu'on l'ajoute
-      titre: this.titreTache,
+      titre: listeTaches.titreTache,
       termine: false,
       statut: ""
     };
     this.tacheService.ajoutTaches(newTache).subscribe({
       next: (data) => {
         this.baseListeTaches.forEach(liste => {
-          if (liste.titre == titreListe) {
+          if (liste.titreListe == listeTaches.titreListe) {
             liste.taches.push(data);
           }
         })
@@ -78,7 +73,7 @@ export class TachesComponent implements OnInit {
     listeTaches.taches.forEach(tache => {
       this.tacheService.removeTaches(tache).subscribe({});
     });
-    this.baseListeTaches = this.baseListeTaches.filter(liste => liste.titre != listeTaches.titre);
+    this.baseListeTaches = this.baseListeTaches.filter(liste => liste.titreListe != listeTaches.titreListe);
   }
 
   supprimerTache(listeTaches: ListeTaches, tache: Tache) {

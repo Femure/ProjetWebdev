@@ -6,6 +6,7 @@ export interface Tache {
 }
 
 export interface ListeTaches {
-    titre: string;
+    titreListe: string;
+    titreTache: string;
     taches : Array<Tache>;
 }

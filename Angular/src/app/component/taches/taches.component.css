@@ -1,8 +1,5 @@
 .container {
     width: 25%;
-    display: inline-block;
-    vertical-align: top;
-    /* d-flex flex-column justify-content-center col m-2 */
 }
 
 .listeTaches {
